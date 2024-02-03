@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
 import { StyleSheet, View, Text } from "react-native";
-import CustomHeader from "../../components/CustomHeader";
+import Header from "../../components/CustomHeader";
+import CountDown from "../../components/CountDown";
+
+/*
 import Player from "../../components/Player";
 import MainSwiper from "../../components/MainSwiper";
+*/
 
 const HomeScreen = ({ navigation }) => {
+  /*
   const [index, setIndex] = useState(0);
 
   console.log(`index: ${index}`);
@@ -18,14 +23,15 @@ const HomeScreen = ({ navigation }) => {
     }
     console.log(`index: ${index}`);
   };
-
+  */
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <StatusBar style="dark" />
-        <CustomHeader />
+        <Header />
 
-        <Player index={index} />
+        <CountDown />
+
         <View
           style={{
             display: "flex",
@@ -34,10 +40,10 @@ const HomeScreen = ({ navigation }) => {
             marginTop: "2%",
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>Top {index + 1} Song</Text>
+          <Text style={{ fontWeight: "bold", color: "black" }}>
+            Home Screen!
+          </Text>
         </View>
-
-        <MainSwiper index={index} onSwiped={onSwiped} />
       </View>
     </SafeAreaView>
   );

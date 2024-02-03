@@ -14,6 +14,16 @@ import { useSelector } from "react-redux";
 const MainSwiper = (props) => {
   const topSongs = useSelector((state) => state.topSongs.topSongs);
 
+  // Check if topSongs.data and topSongs.data.items are defined
+  if (!topSongs || !topSongs.data || !topSongs.data.items) {
+    // Return a loader, placeholder, or null here
+    return (
+      <View style={styles.swiperContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.swiperContainer}>
       <Swiper
@@ -44,7 +54,6 @@ const MainSwiper = (props) => {
           </View>
         )}
         onSwiped={props.onSwiped}
-        // onSwipedBottom={onSwipedButton}
         stackSize={3}
         stackSeparation={14}
         disableTopSwipe
@@ -81,18 +90,15 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontSize: 24,
     marginBottom: 10,
-    color: "white",
+    color: "black",
     width: "100%",
-    textShadowColor: "black",
-    textShadowOffset: { width: 0, height: 5 },
-    textShadowRadius: 10,
     padding: 15,
     textAlign: "center",
   },
   artist: {
-    color: "white",
+    color: "black",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 22,
   },
   imgBackground: {
     width: "100%",

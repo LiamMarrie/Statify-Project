@@ -89,9 +89,9 @@ const Player = (props) => {
         ></TouchableOpacity>
       </View>
 
-      {/* <View style={styles.musicProgress}>
+      <View style={styles.musicProgress}>
         <Text></Text>
-      </View> */}
+      </View>
     </View>
   );
 };

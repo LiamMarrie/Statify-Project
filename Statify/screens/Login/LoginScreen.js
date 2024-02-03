@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { ResponseType, useAuthRequest } from "expo-auth-session";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import * as tokenAction from "../../store/actions/token";
 import * as songAction from "../../store/actions/topSongs";
@@ -78,24 +79,41 @@ const LoginScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
-      <Text
-        style={{
-          fontSize: 30,
-          fontWeight: "bold",
-          color: "white",
-          marginBottom: "20%",
-        }}
-      >
-        Statify
-      </Text>
-      <Button
-        title="Login with Spotify"
-        style={styles.button}
-        onPress={() => {
-          promptAsync();
-        }}
-      />
-      <View style={{ height: 100 }} />
+      <View style={styles.HeroIMGContainer}>
+        <Image
+          source={require("../../images/heroIMG.gif")}
+          style={{ width: 275, height: 275, flex: 0 }}
+        />
+      </View>
+      <View style={styles.ContentContainer}>
+        <Text
+          style={{
+            fontSize: 45,
+            fontWeight: "800",
+            color: "#004921",
+            marginTop: 20,
+            marginBottom: 20,
+            letterSpacing: 5,
+          }}
+        >
+          statify
+        </Text>
+        <Button
+          icon={<Icon name="spotify" size={25} style={styles.SpotifyIcon} />}
+          title="Login with Spotify"
+          buttonStyle={{
+            backgroundColor: "#004921",
+            borderRadius: 15,
+            padding: 15,
+            width: 250,
+          }}
+          style={styles.button}
+          onPress={() => {
+            promptAsync();
+          }}
+        />
+      </View>
+      <View style={{ height: 500 }} />
     </KeyboardAvoidingView>
   );
 };
@@ -107,11 +125,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff9f0",
   },
-  button: {
-    width: 200,
-    marginTop: 50,
-    backgroundColor: "cornflower",
+  HeroIMGContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    top: 250,
+  },
+  ContentContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    top: 250,
+  },
+  SpotifyIcon: {
+    marginRight: 15,
+    color: "#fff9f0",
+    fontSize: 35,
   },
 });
