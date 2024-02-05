@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
 import { StyleSheet, View, Text } from "react-native";
-import Header from "../../components/CustomHeader";
 import CountDown from "../../components/CountDown";
+import Header from "../../components/Header";
 
 /*
 import Player from "../../components/Player";
@@ -28,7 +28,7 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView>
       <View style={styles.container}>
         <StatusBar style="dark" />
-        <Header />
+        <Header title="statify" />
 
         <CountDown />
 
@@ -39,11 +39,7 @@ const HomeScreen = ({ navigation }) => {
             flexDirection: "row",
             marginTop: "2%",
           }}
-        >
-          <Text style={{ fontWeight: "bold", color: "black" }}>
-            Home Screen!
-          </Text>
-        </View>
+        ></View>
       </View>
     </SafeAreaView>
   );

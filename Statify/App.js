@@ -10,10 +10,12 @@ import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
 import songReducer from "./store/reducers/topSongs";
 import { Settings } from "react-native";
+import usernameReducer from "./store/reducers/username";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
   topSongs: songReducer,
+  username: usernameReducer,
 });
 
 const store = createStore(rootReducer);
@@ -21,7 +23,7 @@ const store = createStore(rootReducer);
 const Stack = createStackNavigator();
 
 const globalScreenOptions = {
-  headerStyle: { backgroundColor: "black" },
+  headerStyle: { backgroundColor: "transparent" },
   headerTitleStyle: { color: "white" },
   headerTintColor: "white",
   backgroundColor: "yellow",
@@ -48,4 +50,8 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerShown: {
+    display: "none",
+  },
+});

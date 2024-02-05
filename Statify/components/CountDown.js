@@ -97,7 +97,7 @@ export default CountDown;
 
 const styles = StyleSheet.create({
   CountDownContainer: {
-    backgroundColor: "#ff7b89",
+    backgroundColor: "#004921",
     height: 130,
     padding: 15,
     borderRadius: 8,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     width: "40%",
     padding: 15,
     borderColor: "blue",
-    borderRadius: 30,
+    borderRadius: 15,
   },
   NotifyMe: {
     color: "#8a5082",
