@@ -11,11 +11,13 @@ import tokenReducer from "./store/reducers/token";
 import songReducer from "./store/reducers/topSongs";
 import { Settings } from "react-native";
 import usernameReducer from "./store/reducers/username";
+import profilePictureReducer from "./store/reducers/profilePicture";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
   topSongs: songReducer,
   username: usernameReducer,
+  profilePicture: profilePictureReducer,
 });
 
 const store = createStore(rootReducer);
@@ -43,6 +45,7 @@ export default function App() {
             options={{ headerShown: false }}
             name="Home"
             component={HomeScreen}
+            style={{}}
           />
         </Stack.Navigator>
       </NavigationContainer>

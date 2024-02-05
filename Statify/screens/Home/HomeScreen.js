@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, KeyboardAvoidingView } from "react-native";
 import CountDown from "../../components/CountDown";
 import Header from "../../components/Header";
 
@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
   */
   return (
     <SafeAreaView>
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <StatusBar style="dark" />
         <Header title="statify" />
 
@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
             marginTop: "2%",
           }}
         ></View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
