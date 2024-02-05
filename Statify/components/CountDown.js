@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   InfoContainer: {
     flex: 0,
     backgroundColor: "#8a5082",
-    height: 200,
+    height: 225,
     width: "auto",
     padding: 8,
     borderRadius: 8,

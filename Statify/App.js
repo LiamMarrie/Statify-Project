@@ -10,14 +10,16 @@ import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
 import songReducer from "./store/reducers/topSongs";
 import { Settings } from "react-native";
-import usernameReducer from "./store/reducers/username";
+import userReducer from "./store/reducers/user";
 import profilePictureReducer from "./store/reducers/profilePicture";
+import usernameReducer from "./store/reducers/username";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
   topSongs: songReducer,
-  username: usernameReducer,
+  user: userReducer,
   profilePicture: profilePictureReducer,
+  username: usernameReducer,
 });
 
 const store = createStore(rootReducer);

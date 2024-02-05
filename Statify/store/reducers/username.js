@@ -1,5 +1,5 @@
 // reducers/username.js
-import { SET_USERNAME } from "../actions/user";
+import { SET_USERNAME } from "../actions/username";
 
 const initialState = {
   username: null, // Initial state set to null or an empty string

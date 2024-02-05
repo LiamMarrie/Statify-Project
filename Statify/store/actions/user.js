@@ -1,7 +1,7 @@
 // actions/user.js
-export const SET_USERNAME = "SET_USERNAME";
+export const SET_USER = "SET_USER";
 
-export const setUsername = (username) => ({
-  type: SET_USERNAME,
-  username,
+export const setUser = (user) => ({
+  type: SET_USER,
+  user: user,
 });

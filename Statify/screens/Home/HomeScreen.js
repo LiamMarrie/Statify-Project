@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
 import { StyleSheet, View, Text, KeyboardAvoidingView } from "react-native";
-import CountDown from "../../components/CountDown";
+//import CountDown from "../../components/CountDown";
 import Header from "../../components/Header";
 
 /*
@@ -28,9 +28,9 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView>
       <KeyboardAvoidingView style={styles.container}>
         <StatusBar style="dark" />
-        <Header title="statify" />
+        <Header />
 
-        <CountDown />
+        {/*<CountDown />*/}
 
         <View
           style={{

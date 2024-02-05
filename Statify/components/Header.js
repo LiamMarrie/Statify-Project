@@ -1,9 +1,17 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Linking,
+} from "react-native";
 import SpotifyWebApi from "spotify-web-api-node";
 import { useSelector, useDispatch } from "react-redux";
-import { setUsername } from "../store/actions/user";
+import { setUser } from "../store/actions/user";
 import { setProfilePicture } from "../store/actions/profilePicture";
+import { setUsername } from "../store/actions/username";
 
 import defaultProfilePicture from "../images/defaultPFP.jpg"; // default pfp in case of error fetching pfp
 
@@ -12,7 +20,11 @@ const Header = ({ title }) => {
 
   const token = useSelector((state) => state.token.token);
 
-  const username = useSelector((state) => state.username?.username || "Guest");
+  const user = useSelector((state) => state.user?.user || "Guest");
+
+  const username = useSelector(
+    (state) => state.username?.username || "@username"
+  );
 
   const profilePicture = useSelector(
     (state) => state.profilePicture?.profilePicture || defaultProfilePicture
@@ -36,7 +48,41 @@ const Header = ({ title }) => {
     }
   }, [token, dispatch]);
 
-  //fetch spotify username
+  //fetch spotify display name username
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const spotifyApi = new SpotifyWebApi();
+      spotifyApi.setAccessToken(token);
+
+      try {
+        const userData = await spotifyApi.getMe(); // fetch user data
+        dispatch(setUsername(userData.body.id)); // dispatch action to set the unique Spotify username (id)
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    if (token) {
+      fetchUserData();
+    }
+  }, [token, dispatch]);
+
+  // open spotify profile uri
+  const openSpotifyProfile = async () => {
+    const spotifyProfileLink = `https://open.spotify.com/user/${username}`; // open spotify profile on spotify app
+    try {
+      const supported = await Linking.canOpenURL(spotifyProfileLink);
+      if (supported) {
+        await Linking.openURL(spotifyProfileLink);
+      } else {
+        console.error("Unable to open link");
+      }
+    } catch (err) {
+      console.error(`Failed to open Spotify profile: ${err}`);
+    }
+  };
+
+  //fetch spotify user name
   useEffect(() => {
     const fetchUserData = async () => {
       const spotifyApi = new SpotifyWebApi();
@@ -44,7 +90,7 @@ const Header = ({ title }) => {
 
       try {
         const userData = await spotifyApi.getMe(); // fetch user data from spotify api
-        dispatch(setUsername(userData.body.display_name)); // set username data
+        dispatch(setUser(userData.body.display_name)); // set user name data
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
@@ -57,9 +103,16 @@ const Header = ({ title }) => {
 
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>{title}</Text>
-      <TouchableOpacity style={styles.SpotifyContentContainer}>
-        <Text style={styles.userInfo}>{username}</Text>
+      <View style={styles.SpotifyContentContainer}>
+        <TouchableOpacity onPress={openSpotifyProfile}>
+          <Text style={styles.username}>@{username}</Text>
+        </TouchableOpacity>
+        <Text style={styles.userInfo}>Hey, {user}!</Text>
+        <Text style={styles.headingText}>
+          What have you been listening to recently?
+        </Text>
+      </View>
+      <TouchableOpacity style={styles.SpotifyPFPContainer}>
         <Image
           style={styles.profilePicture}
           source={
@@ -83,6 +136,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingHorizontal: 20,
     marginBottom: 20,
+    position: "relative",
   },
   headerText: {
     fontSize: 22,
@@ -92,17 +146,34 @@ const styles = StyleSheet.create({
   },
   SpotifyContentContainer: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: "left",
     margin: " 0 auto ",
+  },
+  username: {
+    fontSize: 12,
+    color: "#004921",
+    marginBottom: 4,
   },
   userInfo: {
     fontSize: 25,
     fontWeight: "bold",
     color: "#004921",
-    maxWidth: 90,
-    textOverflow: "ellipsis",
+    maxWidth: "250px",
+  },
+  headingText: {
+    fontSize: 12,
+    color: "#004921",
+    maxWidth: "200px",
+    marginTop: 5,
+  },
+  SpotifyPFPContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    margin: " 0 auto ",
   },
   profilePicture: {
     width: 60,
