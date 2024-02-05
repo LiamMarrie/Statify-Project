@@ -13,6 +13,7 @@ import { Settings } from "react-native";
 import userReducer from "./store/reducers/user";
 import profilePictureReducer from "./store/reducers/profilePicture";
 import usernameReducer from "./store/reducers/username";
+import genresReducer from "./store/reducers/genres";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   profilePicture: profilePictureReducer,
   username: usernameReducer,
+  genres: genresReducer,
 });
 
 const store = createStore(rootReducer);

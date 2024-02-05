@@ -23,7 +23,7 @@ const Header = ({ title }) => {
   const user = useSelector((state) => state.user?.user || "Guest");
 
   const username = useSelector(
-    (state) => state.username?.username || "@username"
+    (state) => state.username?.username || "username"
   );
 
   const profilePicture = useSelector(

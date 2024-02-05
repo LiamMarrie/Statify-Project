@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native";
 import { StyleSheet, View, Text, KeyboardAvoidingView } from "react-native";
 //import CountDown from "../../components/CountDown";
 import Header from "../../components/Header";
+import Genres from "../../components/Genres";
 
 /*
 import Player from "../../components/Player";
@@ -29,6 +30,8 @@ const HomeScreen = ({ navigation }) => {
       <KeyboardAvoidingView style={styles.container}>
         <StatusBar style="dark" />
         <Header />
+
+        <Genres />
 
         {/*<CountDown />*/}
 
