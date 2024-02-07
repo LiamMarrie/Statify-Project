@@ -56,9 +56,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  headerShown: {
-    display: "none",
-  },
-});
