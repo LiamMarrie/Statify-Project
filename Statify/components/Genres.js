@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import SpotifyWebApi from "spotify-web-api-node";
 import { useSelector, useDispatch } from "react-redux";
 import { setGenres } from "../store/actions/genres";
 
-const Genres = () => {
+const Genres = ({ timeRange }) => {
+  // Include timeRange prop
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token.token);
   const [genres, setLocalGenres] = useState([]);
@@ -17,11 +25,13 @@ const Genres = () => {
 
     const fetchGenres = async () => {
       try {
-        const genresData = await spotifyApi.getMyTopArtists({ limit: 10 });
+        const genresData = await spotifyApi.getMyTopArtists({
+          limit: 10,
+          time_range: timeRange, // Use the timeRange prop
+        });
         const uniqueGenres = new Set(
           genresData.body.items.flatMap((item) => item?.genres ?? [])
         );
-        // Convert the Set back to an array
         const genresList = Array.from(uniqueGenres);
         dispatch(setGenres(genresList));
         setLocalGenres(genresList);
@@ -31,22 +41,41 @@ const Genres = () => {
     };
 
     fetchGenres();
-  }, [token, dispatch]);
+  }, [token, dispatch, timeRange]);
+
+  const openGenreInSpotify = async (genre) => {
+    const encodedGenre = encodeURIComponent(`${genre} mix`);
+    const url = `spotify:search:${encodedGenre}`;
+    const webUrl = `https://open.spotify.com/search/${encodedGenre}`;
+
+    try {
+      const canOpen = await Linking.canOpenURL(url);
+      if (canOpen) {
+        await Linking.openURL(url);
+      } else {
+        await Linking.openURL(webUrl); // Fallback to web if the app can't open the URL
+      }
+    } catch (error) {
+      console.error("Couldn't open Spotify:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.ContainerTitle}>
-        Genres you've been listening to a lot recently
-      </Text>
+      <Text style={styles.ContainerTitle}>Genres you've been listening to</Text>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.genresContainer}
       >
         {genres.map((genre, index) => (
-          <View key={index} style={styles.genreContainer}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => openGenreInSpotify(genre)}
+            style={styles.genreContainer}
+          >
             <Text style={styles.genre}>{genre}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>

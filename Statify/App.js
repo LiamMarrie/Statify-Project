@@ -49,7 +49,6 @@ export default function App() {
             options={{ headerShown: false }}
             name="Home"
             component={HomeScreen}
-            style={{}}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -38,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
       ],
       usePKCE: false,
       redirectUri: "exp://127.0.0.1:8081",
+      showDialog: true,
     },
     discovery
   );
@@ -59,30 +60,24 @@ const LoginScreen = ({ navigation }) => {
         },
       })
         .then((response) => {
-          dispatch(songAction.addTopSongs(response));
+          // Ensure you're passing the data you need to the reducer, not the response object directly
+          dispatch(songAction.addTopSongs(response.data.items)); // Assuming you want the items from the response
+          dispatch(tokenAction.addToken(token)); // Store the token after successful data fetch
+          navigation.replace("Home", { token: token }); // Navigate after actions are dispatched
         })
         .catch((error) => {
           console.error("error", error.message);
         });
-      setTimeout(
-        () =>
-          navigation.replace("Home", {
-            token: token,
-            other: "blaaaa",
-          }),
-        500
-      );
-      dispatch(tokenAction.addToken(token));
     }
-  });
+  }, [token, dispatch, navigation]); // Add dependencies to ensure effect runs only when necessary
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.HeroIMGContainer}>
         <Image
-          source={require("../../images/heroIMG.gif")}
-          style={{ width: 275, height: 275, flex: 0 }}
+          source={require("../../images/herop4.gif")}
+          style={{ width: 300, height: 400, borderRadius: 10 }}
         />
       </View>
       <View style={styles.ContentContainer}>
@@ -109,7 +104,7 @@ const LoginScreen = ({ navigation }) => {
           }}
           style={styles.button}
           onPress={() => {
-            promptAsync();
+            promptAsync({ useProxy: true, showDialog: true });
           }}
         />
       </View>
@@ -130,13 +125,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    top: 250,
+    top: 150,
   },
   ContentContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    top: 250,
+    top: 180,
   },
   SpotifyIcon: {
     marginRight: 15,
