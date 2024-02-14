@@ -6,13 +6,12 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Linking,
 } from "react-native";
 import SpotifyWebApi from "spotify-web-api-node";
 import { useSelector } from "react-redux";
 
-const TopArtists = ({ timeRange }) => {
-  // Include timeRange prop
+const TopArtists = ({ timeRange, navigation }) => {
+  // Add `navigation` prop
   const [topArtists, setTopArtists] = useState([]);
   const token = useSelector((state) => state.token.token);
 
@@ -26,7 +25,7 @@ const TopArtists = ({ timeRange }) => {
       try {
         const data = await spotifyApi.getMyTopArtists({
           limit: 25,
-          time_range: timeRange, // Use the timeRange prop
+          time_range: timeRange,
         });
         setTopArtists(data.body.items);
       } catch (error) {
@@ -35,7 +34,7 @@ const TopArtists = ({ timeRange }) => {
     };
 
     fetchTopArtists();
-  }, [token, timeRange]); // Correct the dependency array to use `timeRange`
+  }, [token, timeRange]);
 
   return (
     <View style={styles.container}>
@@ -49,7 +48,9 @@ const TopArtists = ({ timeRange }) => {
           <TouchableOpacity
             key={index}
             style={styles.artistContainer}
-            onPress={() => Linking.openURL(artist.external_urls.spotify)}
+            onPress={() =>
+              navigation.navigate("ArtistScreen", { artistId: artist.id })
+            } // Navigate to ArtistScreen with artistId
           >
             <Image
               source={{ uri: artist.images[0]?.url }}

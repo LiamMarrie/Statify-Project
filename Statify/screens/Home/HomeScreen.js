@@ -22,17 +22,17 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ backgroundColor: "#fff9f0" }}>
       <ScrollView>
-        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <StatusBar style="dark" />
           <Header onTimeRangeChange={handleTimeRangeChange} />
 
-          <Vibes timeRange={timeRange} />
+          {/* <Vibes timeRange={timeRange} /> */}
 
           <Genres timeRange={timeRange} />
 
-          <TopArtists timeRange={timeRange} />
+          <TopArtists timeRange={timeRange} navigation={navigation} />
 
           <TopSongs timeRange={timeRange} />
 
@@ -48,10 +48,6 @@ const HomeScreen = ({ navigation }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f6fa",
-  },
   bottomView: {
     display: "flex",
     justifyContent: "center",

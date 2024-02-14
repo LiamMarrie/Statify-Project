@@ -14,6 +14,7 @@ import userReducer from "./store/reducers/user";
 import profilePictureReducer from "./store/reducers/profilePicture";
 import usernameReducer from "./store/reducers/username";
 import genresReducer from "./store/reducers/genres";
+import ArtistScreen from "./screens/Artist/ArtistScreen";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
@@ -49,6 +50,11 @@ export default function App() {
             options={{ headerShown: false }}
             name="Home"
             component={HomeScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ArtistScreen"
+            component={ArtistScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
