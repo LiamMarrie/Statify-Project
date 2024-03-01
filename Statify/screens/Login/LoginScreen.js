@@ -1,13 +1,16 @@
-// screens/Login/LoginScreen.js
-"use client";
-"use strict";
-
-import React, { useEffect, useState } from "react";
-import { StyleSheet, KeyboardAvoidingView, Text, View } from "react-native";
-import { Button, Image } from "react-native-elements";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Animated,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Text,
+  View,
+  Image as RNImage,
+} from "react-native";
+import { Button } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
-import { ResponseType, useAuthRequest } from "expo-auth-session";
-import { useSelector, useDispatch } from "react-redux";
+import { useAuthRequest, ResponseType } from "expo-auth-session";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -19,9 +22,41 @@ const discovery = {
   tokenEndpoint: "https://accounts.spotify.com/api/token",
 };
 
+const PaginationDots = ({ totalPages, currentPage }) => {
+  const dotPosition = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(dotPosition, {
+      toValue: (currentPage - 1) * (styles.dot.width + styles.dot.margin * 2),
+      duration: 250,
+      useNativeDriver: false, // 'left' is not supported by the native animated module
+    }).start();
+  }, [currentPage]);
+
+  return (
+    <View style={styles.paginationContainer}>
+      {Array.from({ length: totalPages }, (_, index) => (
+        <View key={index} style={styles.dot} />
+      ))}
+      <Animated.View
+        style={[
+          styles.dot,
+          styles.activeDot,
+          {
+            position: "absolute",
+            left: dotPosition,
+          },
+        ]}
+      />
+    </View>
+  );
+};
+
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [token, setToken] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 3; // Total number of pages you have
   const [request, response, promptAsync] = useAuthRequest(
     {
       responseType: ResponseType.Token,
@@ -42,6 +77,29 @@ const LoginScreen = ({ navigation }) => {
     },
     discovery
   );
+
+  const pageAnimation = useRef(new Animated.Value(0)).current; // For animating the opacity
+
+  // Animation transition
+  const transitionToPage = (pageNumber) => {
+    Animated.timing(pageAnimation, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setCurrentPage(pageNumber);
+      pageAnimation.setValue(0);
+    });
+  };
+
+  useEffect(() => {
+    Animated.timing(pageAnimation, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [currentPage]);
+
   useEffect(() => {
     if (response?.type === "success") {
       const { access_token } = response.params;
@@ -60,82 +118,153 @@ const LoginScreen = ({ navigation }) => {
         },
       })
         .then((response) => {
-          // Ensure you're passing the data you need to the reducer, not the response object directly
-          dispatch(songAction.addTopSongs(response.data.items)); // Assuming you want the items from the response
-          dispatch(tokenAction.addToken(token)); // Store the token after successful data fetch
-          navigation.replace("Home", { token: token }); // Navigate after actions are dispatched
+          dispatch(songAction.addTopSongs(response.data.items));
+          dispatch(tokenAction.addToken(token));
+          navigation.replace("Home", { token: token });
         })
         .catch((error) => {
           console.error("error", error.message);
         });
     }
-  }, [token, dispatch, navigation]); // Add dependencies to ensure effect runs only when necessary
+  }, [token, dispatch, navigation]);
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <StatusBar style="light" />
-      <View style={styles.HeroIMGContainer}>
-        <Image
-          source={require("../../images/herop4.gif")}
-          style={{ width: 300, height: 400, borderRadius: 10 }}
-        />
+      <Animated.View
+        style={[
+          styles.pageContainer,
+          {
+            opacity: pageAnimation,
+            transform: [
+              {
+                scale: pageAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.96, 1],
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        {currentPage === 1 && (
+          <View style={styles.content}>
+            <RNImage
+              source={require("../../images/Playlist-bro.png")}
+              style={styles.pageImage}
+            />
+            <Text style={styles.pageText}>Track your listening habits</Text>
+          </View>
+        )}
+        {currentPage === 2 && (
+          <View style={styles.content}>
+            <RNImage
+              source={require("../../images/Playing-Music-bro.png")}
+              style={styles.pageImage}
+            />
+            <Text style={styles.pageText}>Find the music you love</Text>
+          </View>
+        )}
+        {currentPage === 3 && (
+          <View style={styles.content}>
+            <RNImage
+              source={require("../../images/Listening-happy-music-bro.png")}
+              style={styles.pageImage}
+            />
+            <Text style={styles.pageText}>Statify</Text>
+            <Button
+              icon={
+                <Icon
+                  name="spotify"
+                  size={24}
+                  color="white"
+                  style={{ marginRight: 10 }}
+                />
+              }
+              title="Login with Spotify"
+              buttonStyle={styles.loginButton}
+              onPress={() => promptAsync({ useProxy: true })}
+            />
+          </View>
+        )}
+      </Animated.View>
+      <View style={styles.bottomContainer}>
+        <PaginationDots totalPages={totalPages} currentPage={currentPage} />
+        {currentPage < totalPages && (
+          <Button
+            icon={<Icon name="arrow-right" size={24} color="white" />}
+            onPress={() => transitionToPage(currentPage + 1)}
+            buttonStyle={styles.nextButton}
+          />
+        )}
       </View>
-      <View style={styles.ContentContainer}>
-        <Text
-          style={{
-            fontSize: 45,
-            fontWeight: "800",
-            color: "#004921",
-            marginTop: 20,
-            marginBottom: 20,
-            letterSpacing: 5,
-          }}
-        >
-          statify
-        </Text>
-        <Button
-          icon={<Icon name="spotify" size={25} style={styles.SpotifyIcon} />}
-          title="Login with Spotify"
-          buttonStyle={{
-            backgroundColor: "#004921",
-            borderRadius: 15,
-            padding: 15,
-            width: 250,
-          }}
-          style={styles.button}
-          onPress={() => {
-            promptAsync({ useProxy: true, showDialog: true });
-          }}
-        />
-      </View>
-      <View style={{ height: 500 }} />
     </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
+    justifyContent: "space-between",
     backgroundColor: "#fff9f0",
   },
-  HeroIMGContainer: {
-    display: "flex",
+  pageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  content: {
     alignItems: "center",
     justifyContent: "center",
-    top: 150,
   },
-  ContentContainer: {
-    display: "flex",
+  pageText: {
+    maxWidth: 250,
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    margin: 10,
+    bottom: 35,
+    color: "#004921",
+  },
+  pageImage: {
+    width: 300,
+    height: 400,
+    resizeMode: "contain",
+  },
+  loginButton: {
+    backgroundColor: "#004921",
+    borderRadius: 20,
+    padding: 15,
+  },
+  nextButton: {
+    backgroundColor: "#004921",
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  bottomContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
-    top: 180,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    width: "100%",
+    bottom: 20,
   },
-  SpotifyIcon: {
-    marginRight: 15,
-    color: "#fff9f0",
-    fontSize: 35,
+  paginationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 10,
+    backgroundColor: "grey",
+    margin: 5,
+  },
+  activeDot: {
+    backgroundColor: "#004921",
   },
 });
+
+export default LoginScreen;

@@ -14,7 +14,7 @@
     "axios": "^1.6.7",
     "expo": "~50.0.5",
     "expo-auth-session": "~5.4.0",
-    "expo-blur": "~12.9.1",
+    "expo-blur": "~12.9.2",
     "expo-random": "~13.6.0",
     "expo-status-bar": "~1.11.1",
     "native": "^0.3.3",

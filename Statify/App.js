@@ -33,7 +33,7 @@ const globalScreenOptions = {
   headerStyle: { backgroundColor: "transparent" },
   headerTitleStyle: { color: "white" },
   headerTintColor: "white",
-  backgroundColor: "yellow",
+  backgroundColor: "#f5f6fa",
 };
 
 export default function App() {

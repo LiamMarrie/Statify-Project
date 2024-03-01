@@ -10,31 +10,35 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { useSelector } from "react-redux";
 
 const ArtistGenres = ({ artistId }) => {
-  const token = useSelector((state) => state.token.token);
+  const token = useSelector((state) => state.token.token); // Access the Spotify API token from Redux store
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    if (!token || !artistId) return;
+    if (!token || !artistId) return; // Ensure we have both a token and an artist ID before proceeding
 
     const spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(token);
+    spotifyApi.setAccessToken(token); // Set the access token for Spotify API requests
 
     const fetchArtistGenres = async () => {
       try {
-        const { body } = await spotifyApi.getArtist(artistId);
-        setGenres(body.genres);
+        const { body } = await spotifyApi.getArtist(artistId); // Fetch artist details by ID
+        setGenres(body.genres); // Update the state with the genres associated with the artist
       } catch (error) {
         console.error("Failed to fetch artist genres:", error);
       }
     };
 
     fetchArtistGenres();
-  }, [artistId, token]);
+  }, [artistId, token]); // Effect dependencies
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Genres</Text>
-      <ScrollView style={styles.genresRow}>
+      <ScrollView
+        style={styles.genresRow}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      >
         {genres.length ? (
           genres.map((genre, index) => (
             <TouchableOpacity key={index} style={styles.genreContainer}>
@@ -52,29 +56,23 @@ const ArtistGenres = ({ artistId }) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    marginLeft: 20,
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 18,
     color: "#004921",
     marginBottom: 10,
     fontWeight: "bold",
-    alignSelf: "left", // Center title if the container flex direction is column
   },
   genresRow: {
-    display: "flex",
     flexDirection: "row",
-    width: "100%", // Full width to accommodate flex wrapping
-    flexWrap: "wrap", // Add this line to wrap the children
   },
   genreContainer: {
     backgroundColor: "#004921",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,
-    margin: 5, // Add margin around each genre for spacing
-    display: "flex",
-    flexDirection: "row",
+    marginRight: 10,
     justifyContent: "center",
     alignItems: "center",
   },

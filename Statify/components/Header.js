@@ -87,7 +87,7 @@ const Header = ({ onTimeRangeChange }) => {
         </TouchableOpacity>
         <Text style={styles.userInfo}>Hey, {user}!</Text>
         <Text style={styles.headingText}>
-          Music you've been listening to lately!
+          What music have you been listening to lately
         </Text>
         <View style={styles.timeRangeButtonsContainer}>
           <TouchableOpacity
