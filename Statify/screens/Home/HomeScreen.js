@@ -13,6 +13,7 @@ import TopSongs from "../../components/topSongs";
 import TopArtists from "../../components/topArtists";
 import TopAlbums from "../../components/topAlbums";
 import CurrentlyPlaying from "../../components/currentlyPlaying";
+import RecentlyPlayed from "../../components/recentlyListened";
 
 const HomeScreen = ({ navigation }) => {
   const [timeRange, setTimeRange] = useState("short_term");
@@ -47,6 +48,7 @@ const HomeScreen = ({ navigation }) => {
         <TopArtists timeRange={timeRange} navigation={navigation} />
         <TopSongs timeRange={timeRange} />
         <TopAlbums timeRange={timeRange} />
+        <RecentlyPlayed />
         <View style={styles.bottomView}></View>
       </ScrollView>
     </SafeAreaView>

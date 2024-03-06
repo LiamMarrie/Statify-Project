@@ -124,8 +124,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   albumName: {
+    color: "#004921",
     fontSize: 14,
     textAlign: "center",
     fontWeight: "600",
+  },
+  artistName: {
+    color: "#666",
   },
 });

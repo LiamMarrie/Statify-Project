@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [token, setToken] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 3; // Total number of pages you have
+  const totalPages = 3;
   const [request, response, promptAsync] = useAuthRequest(
     {
       responseType: ResponseType.Token,

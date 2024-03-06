@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   albumName: {
+    color: "#004921",
     fontWeight: "600",
     textAlign: "center",
   },

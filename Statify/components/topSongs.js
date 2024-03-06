@@ -112,10 +112,12 @@ const styles = StyleSheet.create({
     width: 100,
   },
   songName: {
+    color: "#004921",
     fontWeight: "600",
     textAlign: "center",
   },
   artistName: {
+    color: "#666",
     textAlign: "center",
   },
 });

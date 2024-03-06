@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   trackName: {
+    color: "#004921",
     fontWeight: "600",
     textAlign: "center",
   },

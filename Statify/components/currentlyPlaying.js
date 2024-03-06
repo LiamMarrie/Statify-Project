@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import SpotifyWebApi from "spotify-web-api-node";
 import { useSelector } from "react-redux";
 
 const CurrentlyPlaying = ({ refreshTrigger }) => {
-  const token = useSelector((state) => state.token.token); // Assume token is stored in Redux
+  const token = useSelector((state) => state.token.token);
   const [currentTrack, setCurrentTrack] = useState(null);
 
   useEffect(() => {
@@ -23,6 +30,7 @@ const CurrentlyPlaying = ({ refreshTrigger }) => {
               .map((artist) => artist.name)
               .join(", "),
             image: response.body.item.album.images[0].url,
+            spotifyUrl: response.body.item.external_urls.spotify,
           });
         } else {
           setCurrentTrack(null);
@@ -38,16 +46,28 @@ const CurrentlyPlaying = ({ refreshTrigger }) => {
 
   if (!currentTrack) return null; // Do not render if there's no track
 
+  const openSpotifyLink = async (url) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.error("Unable to open link:", url);
+    }
+  };
+
   return (
     <View style={styles.main}>
       <Text style={styles.title}>Currently Playing</Text>
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => openSpotifyLink(currentTrack.spotifyUrl)}
+      >
         <Image source={{ uri: currentTrack.image }} style={styles.albumCover} />
         <View style={styles.trackInfo}>
           <Text style={styles.trackName}>{currentTrack.name}</Text>
           <Text style={styles.artistName}>{currentTrack.artist}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -56,18 +76,19 @@ export default CurrentlyPlaying;
 
 const styles = StyleSheet.create({
   main: {
-    marginLeft: 20,
-    marginBottom: 20,
+    paddingHorizontal: 25,
   },
   title: {
     fontSize: 18,
     color: "#004921",
     fontWeight: "bold",
-    marginBottom: 10, // Adjust spacing below the title
+    marginBottom: 10,
   },
   container: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 10,
+    borderRadius: 10,
   },
   albumCover: {
     width: 60,

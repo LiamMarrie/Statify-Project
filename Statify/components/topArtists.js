@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   artistName: {
+    color: "#004921",
     fontSize: 14,
     textAlign: "center",
     fontWeight: "600",

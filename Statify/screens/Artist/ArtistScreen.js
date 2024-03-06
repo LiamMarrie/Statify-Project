@@ -18,10 +18,12 @@ import ArtistGenres from "../../components/ArtistGenres";
 import Loading from "../../components/loading";
 import TopTracksByArtist from "../../components/topTracksByArtist";
 import TopAlbumsByArtist from "../../components/topAlbumsByArtist";
+import SimilarArtists from "../../components/SimilarArtists";
 
 const ArtistScreen = ({ route, navigation }) => {
   const { artistId } = route.params;
   const [artistDetails, setArtistDetails] = useState(null);
+  const [relatedArtists, setRelatedArtists] = useState([]);
   const token = useSelector((state) => state.token.token);
 
   useEffect(() => {
@@ -37,6 +39,12 @@ const ArtistScreen = ({ route, navigation }) => {
       try {
         const data = await spotifyApi.getArtist(artistId);
         setArtistDetails(data.body);
+
+        // Fetch related artists
+        const relatedArtistsData = await spotifyApi.getArtistRelatedArtists(
+          artistId
+        );
+        setRelatedArtists(relatedArtistsData.body.artists);
       } catch (error) {
         console.error("Error fetching artist details:", error);
       }
@@ -115,6 +123,10 @@ const ArtistScreen = ({ route, navigation }) => {
         <ArtistGenres artistId={artistId} />
         <TopTracksByArtist artistId={artistId} />
         <TopAlbumsByArtist artistId={artistId} />
+        <SimilarArtists
+          relatedArtists={relatedArtists}
+          navigation={navigation}
+        />
       </ScrollView>
     </SafeAreaView>
   );
