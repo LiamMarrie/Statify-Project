@@ -87,7 +87,6 @@ export default Genres;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 25,
-    paddingTop: 20,
     width: "100%",
   },
   ContainerTitle: {

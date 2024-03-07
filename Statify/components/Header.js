@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     height: 150,
     paddingTop: 30,
     paddingHorizontal: 20,
-    marginBottom: 10,
+    marginBottom: 5,
     position: "relative",
   },
   SpotifyContentContainer: {

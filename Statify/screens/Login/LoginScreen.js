@@ -62,14 +62,14 @@ const LoginScreen = ({ navigation }) => {
       responseType: ResponseType.Token,
       clientId: "50a70b1b6121424084026f75ed4a69bc",
       scopes: [
+        "user-read-private",
+        "user-read-email",
         "user-read-currently-playing",
         "user-read-recently-played",
         "user-read-playback-state",
         "user-top-read",
         "user-modify-playback-state",
         "streaming",
-        "user-read-email",
-        "user-read-private",
       ],
       usePKCE: false,
       redirectUri: "exp://127.0.0.1:8081",
@@ -123,10 +123,21 @@ const LoginScreen = ({ navigation }) => {
           navigation.replace("Home", { token: token });
         })
         .catch((error) => {
-          console.error("error", error.message);
+          if (error.response && error.response.status === 403) {
+            // Handle 403 error (Forbidden)
+            console.error(
+              "Forbidden: Insufficient permissions or rate limit exceeded."
+            );
+          } else {
+            console.error("Error:", error.message);
+          }
         });
     }
   }, [token, dispatch, navigation]);
+
+  const handleLoginWithSpotify = () => {
+    promptAsync({ useProxy: true });
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -183,7 +194,7 @@ const LoginScreen = ({ navigation }) => {
               }
               title="Login with Spotify"
               buttonStyle={styles.loginButton}
-              onPress={() => promptAsync({ useProxy: true })}
+              onPress={handleLoginWithSpotify} // Call the handler function here
             />
           </View>
         )}

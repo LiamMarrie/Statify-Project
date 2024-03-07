@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderRadius: 10,
+    marginBottom: 8,
   },
   albumCover: {
     width: 60,
